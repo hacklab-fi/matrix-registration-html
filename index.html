@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hacklab.fi Matrix-rekisteröinti</title>
+  <style>
+    input:invalid {
+      border: 2px solid red;
+    }
+    input:valid {
+      border: 2px solid green;
+    }
+    input {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Rekisteröinti hacklab.fi -Matrix-palvelimelle</h1>
+  <h2>Registration for the hacklab.fi Matrix homeserver</h2>
+<section style="display:flex;justify-content:center;align-items:center;">
+  <form action="register" method="post">
+    <label for="username">Käyttäjätunnus/User ID:</label>
+    <input id="username" name="username" type="text"
+    required pattern="^@?[a-zA-Z_\-=\.\/0-9]+(:hacklab\.fi)?$"
+    required minlength="1" maxlength="200"><br />
+    <label>Minkä kaupunging hacklabin jäsen olet:</label><br />
+    <input id="helsinki" name="hacklab" value="helsinki" type="radio"><label for="helsinki">Helsinki</label><br />
+    <input id="tampere" name="hacklab" value="tampere" type="radio"><label for="tampere">Tampere</label><br />
+    <input id="vaasa" name="hacklab" value="vaasa" type="radio"><label for="vaasa">Vaasa</label><br />
+    <input id="turku" name="hacklab" value="turku" type="radio"><label for="turku">Turku </label><br />
+    <input id="oulu" name="hacklab" value="oulu" type="radio"><label for="oulu">Oulu</label><br />
+    <input id="jyväskylä" name="hacklab" value="jyväskylä" type="radio"><label for="jyväskylä">Jyväskylä</label><br />
+    <input id="kuopio" name="hacklab" value="kuopio" type="radio"><label for="kuopio">Kuopio</label><br />
+    <input id="joensuu" name="hacklab" value="joensuu" type="radio"><label for="joensuu">Joensuu</label><br />
+    <input id="mikkeli" name="hacklab" value="mikkeli" type="radio"><label for="mikkeli">Mikkeli</label><br />
+    <input id="virrat" name="hacklab" value="virrat" type="radio"><label for="virrat">Virrat</label><br />
+    <input id="lahti" name="hacklab" value="lahti" type="radio"><label for="lahti">Lahti</label><br />
+    <input id="kouvola" name="hacklab" value="kouvola" type="radio"><label for="kouvola">Kouvola</label><br />
+    <input id="nokia" name="hacklab" value="nokia" type="radio"><label for="nokia">Nokia</label><br />
+    <input id="seinäjoki" name="hacklab" value="seinäjoki" type="radio"><label for="seinäjoki">Seinäjoki</label><br />
+    <label for="password">Salasana/Password:</label>
+    <input id="password" name="password" type="password"
+    required minlength="8" maxlength="128"><br />
+    <label for="confirm_password">Toista salasana/Repeat password:</label>
+    <input id="confirm_password" name="confirm" type="password"
+    required><br />
+    <label for="token">Invite token:</label>
+    <input id="token" name="token" type="text"
+    required pattern="^([A-Z][a-z]+)+$"><br />
+    <input type="submit" value="register">
+
+    <p>Salasanan on oltava vähintään 8 merkkiä pitkä</p>
+    <p>The password must be at least 8 characters long</p>
+  </form>
+	</section>
+  <script>
+    // all javascript here is optional, the registration form works fine without
+
+    // see https://stackoverflow.com/a/901144/3779427
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    // set token input to "?token=" query parameter
+    document.getElementById('token').value = getParameterByName("token");
+
+    // html5 validators
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    var confirm_password = document.getElementById("confirm_password");
+    var token = document.getElementById("token");
+
+    username.addEventListener("input", function (event) {
+      if (username.validity.typeMismatch) {
+        username.setCustomValidity("format: @username:hacklab.fi");
+      } else {
+        username.setCustomValidity("");
+      }
+    });
+
+    token.addEventListener("input", function (event) {
+      if (token.validity.typeMismatch) {
+        token.setCustomValidity("case-sensitive, e.g: SardineImpactReport");
+      } else {
+        token.setCustomValidity("");
+      }
+    });
+
+    password.addEventListener("input", function (event) {
+      if (password.validity.typeMismatch) {
+        password.setCustomValidity("atleast 8 characters long");
+      } else {
+        password.setCustomValidity("");
+      }
+    });
+
+    function validatePassword(){
+      if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("passwords don't match");
+      } else {
+        confirm_password.setCustomValidity("");
+      }
+    }
+
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
+  </script>
+</body>
+</html>
+
